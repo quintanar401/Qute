@@ -1,0 +1,23 @@
+[
+    {
+        "name": "host",
+        "value_type": "sC",
+        "convert_to": "s"
+    },
+    {
+        "name": "autoStart",
+        "value_type": "b",
+        "default": true
+    },
+    {
+        "name": "enabled",
+        "value_type": "b",
+        "default": true
+    },
+    {
+        "name": "mode",
+        "value_type": "sC",
+        "convert_to": "s",
+        "default": "`once"
+    }
+]

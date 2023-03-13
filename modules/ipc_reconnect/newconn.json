@@ -1,0 +1,13 @@
+[
+    {
+        "name": "reconnectSchedule",
+        "value_type": ["n","N"],
+        "convert_to": "N",
+        "optional": true
+    },
+    {
+        "name": "autoConnect",
+        "value_type": "b",
+        "default": "0b"
+    }
+]

@@ -1,0 +1,22 @@
+{
+    "hdb": {
+        "id": "source.dataType.procType.instance",
+        "params": ["port"],
+        "default": {"procType": "hdb", "host": "@HDB_HOST"}
+    },
+    "rdb": {
+        "id": "source.dataType.procType.instance",
+        "params": ["port"],
+        "default": {"procType": "rdb", "host": "@RDB_HOST"}
+    },
+    "tp": {
+        "id": "source.dataType.procType",
+        "params": ["port"],
+        "default": {"procType": "tp", "host": "@TP_HOST"}
+    },
+    "pdb": {
+        "id": "source.dataType.procType",
+        "params": ["port"],
+        "default": {"procType": "pdb", "host": "@HDB_HOST"}
+    }
+}

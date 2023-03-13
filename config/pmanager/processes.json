@@ -1,0 +1,6 @@
+{
+    "hdb:reuters.eq": { "port": 3001 },
+    "rdb:reuters.eq..0-3": { "port": 3005 },
+    "tp:reuters.eq": { "port": 3002 },
+    "pdb:reuters.eq": { "port": 3003 }
+}

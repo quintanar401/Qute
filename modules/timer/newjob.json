@@ -1,0 +1,91 @@
+[
+    {
+        "name": "fn",
+        "value_type": ["fn","s"]
+    },
+    {
+        "name": "delay",
+        "optional": true,
+        "value_type": ["n","t","u","v"],
+        "convert_to": "n"
+    },
+    {
+        "name": "interval",
+        "optional": true,
+        "value_type": ["n","t","u","v"],
+        "convert_to": "n"
+    },
+    {
+        "name": "sTime",
+        "optional": true,
+        "value_type": ["t","n","u","v","d","p"],
+        "convert_to": ["t","t","t","t","p","p"]
+    },
+    {
+        "name": "eTime",
+        "optional": true,
+        "default": "0Wp",
+        "value_type": ["t","n","u","v","d","p"],
+        "convert_to": ["t","t","t","t","p","p"]
+    },
+    {
+        "name": "args",
+        "optional": true,
+        "default": "0"
+    },
+    {
+        "name": "until",
+        "optional": true
+    },
+    {
+        "name": "relativeInt",
+        "optional": true,
+        "default": true,
+        "value_type": "b",
+        "convert_to": "b"
+    },
+    {
+        "name": "strict",
+        "optional": true,
+        "default": false,
+        "value_type": "b",
+        "convert_to": "b"
+    },
+    {
+        "name": "logStatus",
+        "optional": true,
+        "default": true,
+        "value_type": "b",
+        "convert_to": "b"
+    },
+    {
+        "name": "id",
+        "value_type": "j",
+        "setter": "{[x;y] $[`id in key x;'\"readonly\";y]}"
+    },
+    {
+        "name": "name",
+        "optional": true,
+        "default": "`",
+        "value_type": ["s","C"],
+        "convert_to": "s"
+    },
+    {
+        "name": "group",
+        "optional": true,
+        "default": "`",
+        "value_type": ["s","C"],
+        "convert_to": "s"
+    },
+    {
+        "name": "cb",
+        "optional": true,
+        "value_type": ["fn","s"]
+    },
+    
+    {
+        "name": "start",
+        "typ": "action",
+        "getter": ".timer.start"
+    }
+]

@@ -1,0 +1,78 @@
+[
+    {
+        "name": "name",
+        "value_type": "s",
+        "setter": "{[x;y] $[`name in key x;'\"readonly\";y]}"
+    },
+    {
+        "name": "handle",
+        "value_type": "i",
+        "setter": "{[x;y] $[`handle in key x;'\"readonly\";y]}"
+    },
+    {
+        "name": "id",
+        "value_type": "p",
+        "setter": "{[x;y] $[`id in key x;'\"readonly\";y]}"
+    },
+    {
+        "name": "result",
+        "typ": "action",
+        "getter": "{.ipc.result}",
+        "setter": "{.ipc.result:y}"
+    },
+    {
+        "name": "timeout",
+        "value_type": ["i","j","t"],
+        "convert_to": "j"
+    },
+    {
+        "name": "connect",
+        "typ": "action",
+        "getter": ".ipc.connConnect"
+    },
+    {
+        "name": "disconnect",
+        "typ": "action",
+        "getter": ".ipc.connDisconnect"
+    },
+    {
+        "name": "isAlive",
+        "typ": "action",
+        "getter": ".ipc.connIsAlive"
+    },
+    {
+        "name": "send",
+        "typ": "action",
+        "setter": ".ipc.connSend"
+    },
+    {
+        "name": "asend",
+        "typ": "action",
+        "setter": ".ipc.connASend"
+    },
+    {
+        "name": "trySend",
+        "typ": "action",
+        "setter": ".ipc.connTrySend"
+    },
+    {
+        "name": "tryASend",
+        "typ": "action",
+        "setter": ".ipc.connTryASend"
+    },
+    {
+        "name": "setHandler",
+        "typ": "action",
+        "setter": ".ipc.setHandler"
+    },
+    {
+        "name": "setName",
+        "typ": "action",
+        "setter": ".ipc.setName"
+    },
+    {
+        "name": "getHandle",
+        "typ": "action",
+        "getter": ".ipc.getHandle"
+    }
+]

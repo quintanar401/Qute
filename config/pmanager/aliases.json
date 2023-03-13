@@ -1,0 +1,5 @@
+{
+    "HDB_HOST": "!.sys.host",
+    "TP_HOST": "!.sys.host",
+    "RDB_HOST": "!.sys.host"
+}

@@ -1,0 +1,37 @@
+[
+    {
+        "name": "id",
+        "value_type": "j",
+        "setter": "{[x;y] $[`id in key x;'\"readonly\";y]}"
+    },
+    {
+        "name": "resume",
+        "typ": "action",
+        "getter": ".timer.resume"
+    },
+    {
+        "name": "stop",
+        "typ": "action",
+        "getter": ".timer.stop"
+    },
+    {
+        "name": "suspend",
+        "typ": "action",
+        "getter": ".timer.suspend"
+    },
+    {
+        "name": "clone",
+        "typ": "action",
+        "getter": ".timer.clone"
+    },
+    {
+        "name": "run",
+        "typ": "action",
+        "getter": ".timer.run"
+    },
+    {
+        "name": "runOnce",
+        "typ": "action",
+        "getter": ".timer.runOnce"
+    }
+]

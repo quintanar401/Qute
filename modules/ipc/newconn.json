@@ -1,0 +1,84 @@
+[
+    {
+        "name": "name",
+        "value_type": "s",
+        "default": "`"
+    },
+    {
+        "name": "host",
+        "value_type": "s",
+        "default": "`localhost"
+    },
+    {
+        "name": "port",
+        "value_type": ["i","j"],
+        "convert_to": "i"
+    },
+    {
+        "name": "user",
+        "value_type": "s",
+        "default": "`"
+    },
+    {
+        "name": "password",
+        "value_type": "C",
+        "optional": true
+    },
+    {
+        "name": "connectionTimeout",
+        "value_type": ["i","j","t"],
+        "convert_to": "j",
+        "optional": true
+    },
+    {
+        "name": "requestTimeout",
+        "value_type": ["i","j","t"],
+        "convert_to": "j",
+        "optional": true
+    },
+    {
+        "name": "unix",
+        "value_type": "b",
+        "optional": true
+    },
+    {
+        "name": "ssl",
+        "value_type": "b",
+        "optional": true
+    },
+    {
+        "name": "unique",
+        "value_type": "s",
+        "default": "`no"
+    },
+    {
+        "name": "cb",
+        "value_type": ["fn","s"],
+        "optional": true
+    },
+    {
+        "name": "onConnect",
+        "value_type": ["fn","s"],
+        "optional": true
+    },
+    {
+        "name": "logError",
+        "value_type": "b",
+        "optional": true
+    },
+    {
+        "name": "add",
+        "typ": "action",
+        "getter": ".ipc.add"
+    },
+    {
+        "name": "open",
+        "typ": "action",
+        "getter": ".ipc.open"
+    },
+    {
+        "name": "is0",
+        "typ": "action",
+        "getter": ".ipc.is0"
+    }
+]

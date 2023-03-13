@@ -1,0 +1,8 @@
+[
+    {
+        "name": "disconnectTimeout",
+        "value_type": ["n","t"],
+        "convert_to": "n",
+        "optional": true
+    }
+]
