@@ -19,5 +19,14 @@
         "value_type": "sC",
         "convert_to": "s",
         "default": "`once"
+    },
+    {
+        "name": "main",
+        "value_type": ["s","C","S","strings"],
+        "convert_to": "S"
+    },
+    {
+        "name": "start_cmd",
+        "value_type": "C"
     }
 ]

@@ -41,7 +41,9 @@
     .pman.log.info "connecting to MBUS";
     .pman.mbus: .sys.use`mbus;
     // subscribe to process update events
-    .pman.mbus.sub `pmanager`process`cb`.notify!(.pman.cfg.id;::;`.pman.upd;1b);
+    .pman.mbus.sub `pmanager`process`event`cb`.notify!(.pman.cfg.id;::;::;`.pman.upd;1b);
+    // pin process params
+    {.pman.mbus.pin  `pmanager`process`cmd`data!(.pman.cfg.id;x`id;`setCfg;x`config)} each 0!.pman.processes;
     // startProc will wait for sub akn to get all current proc data
     .pman.isInited:0b;
     .sys.timer.new[][`name;`.pman.pmanager][`sTime;.z.P+0D00:00:05][`interval;0D00:01][`fn;`.pman.startProcs]`start;

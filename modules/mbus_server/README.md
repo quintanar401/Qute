@@ -4,6 +4,13 @@ Message Bus Server module can be used to connect several Q processes and pass me
 
 MBus should not be used to pass realtime tick data but it can be used to find the data source/consumer.
 
+Startup example:
+```bash
+q core/loader.q -main mbus_server -mservers 3010 -t 100 -p 3010
+# client
+q core/loader.q -main mbus -mbus 3010 -t 100 -p 3001
+```
+
 A publisher calls one of `send`, `post`, `pin` functions to publish a message.
 * send - just sends a message.
 * post - message will be saved on the servers while the client is alive and sent to all new subscribers.

@@ -88,10 +88,11 @@
 .smart.tMap[`dict]:99h;
 .smart.tMap[`fn]:100h;
 .smart.tMap[`table]:98h;
+.smart.tMap[`strings]:121h; // artificial
 // type num -> str
 .smart.tsMap: {((type each t)!`$string[k],\:" list"),(neg type each t)!k:key each t:"bxhijeftuvdpns"$\:()}[];
 .smart.tsMap["h"$100+til 12]:`function;
-.smart.tsMap[99 98 -10 10h]:`dictionary`table`char`string;
+.smart.tsMap[99 98 -10 10 121h]:`dictionary`table`char`string`strings;
 // converts from one type to another
 // trivial: "b" -> "b"
 // simple: "i" -> "j"
@@ -101,6 +102,11 @@
     (`dict`dict;::);
     (`fn`fn;::);
     (`table`table;::);
+    (`strings`strings;::);
+    (`C`strings;enlist);
+    (`s`strings;{enlist string x});
+    (`S`strings`strings;string);
+    (`strings`S;`$);
     (`t`n;"n"$);
     (`u`n;"n"$);
     (`v`n;"n"$);
@@ -158,9 +164,9 @@
     ch:{
         if[not count y:(),y; :y];
         f:{
-            if[(t:type z) in y; :z];
+            if[(t:$[0=t:type z;$[all 10=type each z;121h;t];t]) in y; :z];
             // try to convert from string
-            if[(t in 0 10h)&(t2:.Q.t abs yy:first y)in .Q.t except " gc";
+            if[(t in 121 10h)&(t2:.Q.t abs yy:first y)in .Q.t except " gc";
                 if[not 10=type z:@[upper[t2]$;z;::]; :$[yy<0;z;(),z]]; // conversion is succ
             ];
             // allow float -> int/long conversion too

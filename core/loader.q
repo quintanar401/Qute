@@ -242,5 +242,5 @@ update namespace:`, api:count[i]#enlist 0#` from `.sys.modules;
 .sys.timer:.sys.use`timer;
 
 if[`main in key .sys.opt;
-  .sys.main: .sys.use `$first .sys.opt`main;
+  .sys.main: .sys.use each `$"," vs first .sys.opt`main;
  ];

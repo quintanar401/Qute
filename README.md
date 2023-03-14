@@ -51,12 +51,26 @@ h:.sys.use`help; -1 h.help `module; // explicit
 i:.sys.use`ipc; p:i.new[]; -1 p`help; -1 p[`help;`open]; // smart pointer
 ```
 
+### Usage
+
+```bash
+# basic
+q core/loader.q
+# load startup modules, provide cfg dirs
+q $QUTE/core/loader.q -main mod1,mod2 -config /path/to/cfg1,/path/to/cfg2 -t 100 -p 2020
+```
+
+By default `qute` uses its own directory to load modules. Set it via `-qute` argument or QUTE env variable. Additional modules: `-mpath p1[,p2]*` option.
+Additional configs: `-config p1[,p2]*` option.
+
+`-main module1[,module2]*` option can be used to load startup modules.
+
 ### Module structure
 
 ```Rust
 // all top level expressions will be executed once in the default instance
 .mod.query: .sys.use `queryLib; // import another module, none can change its local state
-// args can be passes to a module too
+// args can be passed to a module too
 .mod.lib: .sys.use[`name;arg];
 // Some variables will be set automatically
 // .mod.cfg  -- contains module configs if there are any (json, csv)
@@ -67,7 +81,7 @@ i:.sys.use`ipc; p:i.new[]; -1 p`help; -1 p[`help;`open]; // smart pointer
 .mod.mInit:{[] ...; `fn1`fn2`fn3 }; // mInit inits the default first instance (state vars for example) and returns API functions
 
 // iInit will be executed once per use of .sys.use
-// if there is no iInit Qute assumes that the module is singleton
+// if there is no iInit Qute assumes that the module is a singleton
 .mod.iInit:{[...]
   // import local modules if needed
   .mod.query2: .sys.use `queryLib2;
@@ -77,7 +91,7 @@ i:.sys.use`ipc; p:i.new[]; -1 p`help; -1 p[`help;`open]; // smart pointer
 .mod.var:1;   // module local state/function
 ```
 
-### Module extention
+#### Module extention
 
 Composition:
 ```Rust
@@ -100,7 +114,7 @@ Patching:
 .sys.patch[`.mod.var;val];
 ```
 
-### Module resolution
+#### Module resolution
 
 Goals:
 * Allow different versions in one process. A newer version can be incompatible with some modules.
@@ -173,7 +187,7 @@ The value string will be evaluated. Sometimes it is more convenient to cast the 
 
 #### App configuration
 
-If there is a default config directory(ies) all files from `$CONFIG/module_name` also will be loaded. Be careful: `module_name` is the logical module name - there can be log1 and log2 that both are named log.
+If there is a default config directory(ies) all files from `$CONFIG/module_name` also will be loaded (duplicates will be overwritten). Be careful: `module_name` is the logical module name - there can be log1 and log2 that both are named log.
 
 ### Basic components
 

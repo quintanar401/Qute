@@ -28,7 +28,7 @@ h:h`open;
 
 JSON file: array of objects with parameters. Supported fields:
 * name - param's name.
-* value_type - type or array of allowed types in Q format: "f", "F" and etc.
+* value_type - type or array of allowed types in Q format: "f", "F" and etc. Extra types: fn, dict, table, strings.
 * convert_to - type or array of types to convert to. If there are several types then convert_to.len == value_type.len.
 * default - default value, value function is called on this string.
 * optional - bool, optional or not.

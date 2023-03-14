@@ -4,6 +4,7 @@
 
 // mandatory server fields
 .msrv.cfg.address:(0#`)!();
+.msrv.cfg.servers:();
 
 .msrv.clients:();
 
@@ -124,7 +125,7 @@
     `.msrv.subscribers upsert (cl;flt;msg`.id);
 
     // send pinned msgs
-    {x[`asend;(.msrv.name;`upd;y;z)]}[cl;msg`.id] each .msrv.msgs where {@[x;y 1;0b]}[flt] each .msrv.msgs;
+    {x[`asend;(.msrv.name;`upd;y;z 1)]}[cl;msg`.id] each .msrv.msgs where {@[x;y 1;0b]}[flt] each .msrv.msgs;
     if[1b~msg`.notify; cl[`asend;(.msrv.name;`upd;msg`.id;1b)]];
  };
 
