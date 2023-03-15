@@ -1,9 +1,11 @@
 .log.level:`normal;
-.log.handle:-1;
-.log.ehandle:-2;
+.log.handle:1;
+.log.ehandle:$[`logfile in key .sys.opt;1;2]; // if redirected use only stdout
 .log.name:`; // module name
 
-.log.mInit:{[cfg] `info`err`dbg`dbg2`warn`setLevel};
+.log.mInit:{[cfg]
+    `info`err`dbg`dbg2`warn`setLevel
+ };
 
 .log.iInit:{[cfg]
     // possible init arguments
@@ -21,7 +23,7 @@
     .log.sname:10$"[",string[.log.name],"]"
  };
 
-.log.handler:{[name;prefix;caller;msg] string[.sys.P[]],prefix,name,msg," [",caller,"]" };
+.log.handler:{[name;prefix;caller;msg] string[.sys.P[]],prefix,name,msg," [",caller,"]\n" };
 
 .log.ehandler:.log.handler;
 

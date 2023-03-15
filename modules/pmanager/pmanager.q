@@ -39,14 +39,13 @@
     update autoStart:config@\:`autoStart, mode:config@\:`mode, enabled:config@\:`enabled from `.pman.processes;
     // mbus
     .pman.log.info "connecting to MBUS";
+    .pman.isInited:0b;
     .pman.mbus: .sys.use`mbus;
     // subscribe to process update events
     .pman.mbus.sub `pmanager`process`event`cb`.notify!(.pman.cfg.id;::;::;`.pman.upd;1b);
     // pin process params
-    {.pman.mbus.pin  `pmanager`process`cmd`data!(.pman.cfg.id;x`id;`setCfg;x`config)} each 0!.pman.processes;
+    {.pman.mbus.pin  `pmanager`process`cmd`data!(.pman.cfg.id;x`id;`setCfg;(x`config),`pmanager`pmanager_port!(.pman.cfg.id;.sys.port))} each 0!.pman.processes;
     // startProc will wait for sub akn to get all current proc data
-    .pman.isInited:0b;
-    .sys.timer.new[][`name;`.pman.pmanager][`sTime;.z.P+0D00:00:05][`interval;0D00:01][`fn;`.pman.startProcs]`start;
  };
 
 .pman.procTemplates:{
@@ -100,14 +99,18 @@
     }/[enlist cfg;c#pid;id];
     // finish cfg
     :{
-        cfg:@[z;`validate;{.pman.log.err "invalid process config ",x,":",y; 'y}y];
+        cfg:@[z;`validate;{.pman.log.err "invalid process config ",x,": ",y; 'y}y];
         (`$"." sv .sys.str each cfg .pman.cfg.p2id x;cfg)
     }[tid;x] each cfg;
  };
 
 .pman.upd:{[msg]
     show msg;
-    if[1b~msg; .pman.isInited:1b; :()];
+    if[1b~msg;
+        if[.pman.isInited; :()];
+        .pman.isInited:1b;
+        :.sys.timer.new[][`name;`.pman.pmanager][`sTime;.z.P+0D00:00:01][`interval;0D00:01][`fn;`.pman.startProcs]`start;
+    ];
     .pman.log.info "Process ",string[id:msg`process],": ",string ev:msg`event;
     .pman.processes[id;`status]: ev;
  };
@@ -120,4 +123,12 @@
 
 .pman.startProc:{
     .pman.log.info "Starting ",string x`id;
+    c[`startCmd][x`id;c:x`config];
+    .pman.processes[x`id;`status]:`starting;
+ };
+
+.pman.startCmd:{[id;cfg]
+    .pman.log.info "start /b q ",(1_string .sys.qute),"/core/loader.q -main process -mbus ",(first .sys.opt`mbus),
+        " -pmanager ",string[.pman.cfg.id]," -pid ",string[id]," -logfile ./logs/",string[id],".log",$[0=cfg`timer;"";" -t ",string cfg`timer],
+        $[0=cfg`timeout;"";" -T ",string cfg`timeout],$[0=cfg`port;"";" -p ",string cfg`port]," <nul";
  };

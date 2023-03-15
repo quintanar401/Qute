@@ -26,7 +26,26 @@
         "convert_to": "S"
     },
     {
-        "name": "start_cmd",
-        "value_type": "C"
+        "name": "startCmd",
+        "value_type": "fn",
+        "default": ".pman.startCmd"
+    },
+    {
+        "name": "timer",
+        "value_type": "ij",
+        "convert_to": "j",
+        "default": "100"
+    },
+    {
+        "name": "timeout",
+        "value_type": "ij",
+        "convert_to": "j",
+        "default": "0"
+    },
+    {
+        "name": "port",
+        "value_type": "ij",
+        "convert_to": "j",
+        "default": "0"
     }
 ]

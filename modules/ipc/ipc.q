@@ -47,7 +47,8 @@
         .ipc.event.fire[`outbound.connect_failed;nm];
         '"connectionFailed";
     ];
-    h
+    .ipc.onConnect[nm;h];
+    :.ipc.conn.new enlist[`name]!enlist nm;
  };
 
 .ipc.add:{[conn]
@@ -58,11 +59,17 @@
     c
  };
 
+.ipc.connExists:{[conn]
+    cfg:.ipc.updName .ipc.newConn.validate conn;
+    (cfg`name) in (0!.ipc.outbound)`name
+ };
+
 .ipc.is0:{(x[`host]in`localhost,.sys.host)&.sys.port=x`port};
 
 .ipc.defaultOutbound:{(first 0#.ipc.outbound),`logError`unix`connectionTimeout`requestTimeout`cb!(.ipc.cfg.logError;.ipc.cfg.unix;.ipc.cfg.connectionTimeout;.ipc.cfg.requestTimeout;())};
+.ipc.updName:{[cfg] if[null cfg`name; cfg[`name]: `$string[cfg`host],":",string[cfg`port],$[null u:cfg`user;"";":",string u]]; cfg};
 .ipc.initOutbound:{[cfg]
-    if[null cfg`name; cfg[`name]: `$string[cfg`host],":",string[cfg`port],$[null u:cfg`user;"";":",string u]];
+    cfg:.ipc.updName cfg;
     if[(n:cfg`name) in (0!.ipc.outbound)`name; '"connectionExists"];
     default: .ipc.defaultOutbound[];
     .ipc.outbound[n]: default,(key[default] inter key cfg)#cfg;
@@ -83,9 +90,10 @@
     r:@[hopen;(conn,pwd;to);::];
     if[10=type r;
         $[cfg`logError;.ipc.log.err;.ipc.log.info] "Connection failed with ",r;
-        r:0Ni;
+        :0Ni;
     ];
     if[r=0; '"0 handle"];
+    .ipc.log.info "handle: ",string r;
     r
  };
 
@@ -219,6 +227,7 @@
 
 / ws/tcp/unix inbound/outbound close
 .ipc.onClose:{[h]
+    if[h=0; :.ipc.log.info "spurious 0 handle close"];
     if[not null n:exec first name from .ipc.outbound where handle=h;
         $[.ipc.outbound[n;`logError];.ipc.log.err;.ipc.log.info] "outbound connection disconnected: ",string[n],"[",string[h],"]";
         : .ipc.onOutboundDisconnect n;

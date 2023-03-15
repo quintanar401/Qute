@@ -107,6 +107,7 @@
     (`s`strings;{enlist string x});
     (`S`strings`strings;string);
     (`strings`S;`$);
+    (`C`S;{enlist`$x});
     (`t`n;"n"$);
     (`u`n;"n"$);
     (`v`n;"n"$);
@@ -182,6 +183,7 @@
         if[0=count conv:(),conv; :ch]; // type check only
         if[count[vt]>i:(vt:(),vt)?`fn; conv:(conv where not vt=`fn),conv 12#i]; // adjust for fn
         ty:value[ch] 2; // allowed types
+        A::(ch;vt;conv);
         if[not all e:(ty2:ty,'count[ty]#.smart.tMap conv)in key .smart.typeConvMap; '"invalid conversion(s): ",", "sv {x[0],"->",x 1} each string distinct .smart.tsMap ty2 where not e];
         {y[type z] x z}[ch;ty!.smart.typeConvMap ty2] // check type and convert
     };

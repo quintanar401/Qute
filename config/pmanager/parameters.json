@@ -2,6 +2,5 @@
     { "name": "dataType", "value_type": "sC", "convert_to": "s"},
     { "name": "procType", "value_type": "sC", "convert_to": "s"},
     { "name": "source", "value_type": "sC", "convert_to": "s"},
-    { "name": "instance", "value_type": "ij", "convert_to": "j", "default": 0},
-    { "name": "port", "value_type": "ij", "convert_to": "i"}
+    { "name": "instance", "value_type": "ij", "convert_to": "j", "default": 0}
 ]

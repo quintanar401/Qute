@@ -60,9 +60,10 @@
  };
 
 // tmp bindings
+if[`logfile in key .sys.opt; system "1 ",first .sys.opt`logfile];
 .sys.log.info:{-1 "INFO ",x};
 .sys.log.dbg:{-1 "DBG  ",x};
-.sys.log.err:{-2 "ERROR ",x};
+.sys.log.err:{-1 "ERROR ",x};
 
 .sys.trp:{[f;a] .Q.trp};
 
@@ -119,7 +120,7 @@ update namespace:`, api:count[i]#enlist 0#` from `.sys.modules;
 .sys.loadMod:{[n;v1;v2]
     .sys.log.dbg "Loading module ",(sn:string n),", version range ",.sys.v2str[v1],"-",.sys.v2str v2;
     m: .sys.modules idx:exec last i from .sys.modules where version within (v1;v2), name = n;
-    if[null idx; '"module not found"];
+    if[null idx; '"module not found: ",string n];
     if[not `=m`status; : idx]; // already loaded
     .sys.log.info "Module is found. Loading the code [",string[m`path],"] and config files...";
     txt: "c"$@[read1;p;{'"couldn't load module ",(1_string x),": ",y}p:` sv m[`path],` sv n,`q];
@@ -207,7 +208,7 @@ update namespace:`, api:count[i]#enlist 0#` from `.sys.modules;
 .sys.P:{.z.P};
 .sys.T:{.z.T};
 .sys.D:{.z.D};
-.sys.n:{.z.N};
+.sys.N:{.z.N};
 .sys.p:{.z.p};
 .sys.t:{.z.t};
 .sys.d:{.z.d};
@@ -224,6 +225,7 @@ update namespace:`, api:count[i]#enlist 0#` from `.sys.modules;
 // In normal case return just API functions, for tests we need the namespace too.
 // useFrom - load the module from a namespace
 .sys.use:(')[{r:.sys.useI x; r[1]!r[0] r 1};enlist];
+.sys.xuse:(')[{@[{r:.sys.useI x; r[1]!r[0] r 1};x;{.sys.log.err ".sys.use failed with ",x; exit 1}]};enlist];
 .sys.useFrom:(')[{.sys.loadModFrom[x 0;x 1]; r:.sys.useI enlist[x 0],2_x; r[1]!r[0] r 1};enlist];
 .sys.useTest:(')[{r:.sys.useI x; (r[1],`ns)!(r[0] r 1),r 0};enlist];
 .sys.getModule:{[p]
@@ -236,11 +238,11 @@ update namespace:`, api:count[i]#enlist 0#` from `.sys.modules;
 
 .sys.help:{.sys.help: f:(.sys.use`help)`help; f x}; // defer module loading
 .sys.logs.on:{.sys.logs_tmp,:enlist (x;y)}; // avoid a use loop
-.sys.log:.sys.use[`log;`SYSTEM];
-.sys.logs:.sys.use`event;
+.sys.log:.sys.xuse[`log;`SYSTEM];
+.sys.logs:.sys.xuse`event;
 (.sys.logs.on .)each .sys.logs_tmp;
-.sys.timer:.sys.use`timer;
+.sys.timer:.sys.xuse`timer;
 
 if[`main in key .sys.opt;
-  .sys.main: .sys.use each `$"," vs first .sys.opt`main;
+  .sys.main: .sys.xuse each `$"," vs first .sys.opt`main;
  ];

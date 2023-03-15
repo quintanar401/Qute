@@ -80,5 +80,10 @@
         "name": "is0",
         "typ": "action",
         "getter": ".ipc.is0"
+    },
+    {
+        "name": "exists",
+        "typ": "action",
+        "getter": ".ipc.connExists"
     }
 ]
