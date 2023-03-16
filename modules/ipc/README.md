@@ -24,7 +24,13 @@ ev.on[`outbound.connect;`myhandler;{[ev] ... ev`data ...}]; / and other 'event' 
 Specific event handlers:
 * onConnect option in new connect smart pointer.
 
-Also you can setup a generic handler via rmanager API. IPC adds `.ipc.open` to .z.po/.z.wo, `.ipc.close` to .z.pc/.z.wc, `.ipc.exec` to .z.ps, .z.pg before the generic `exec` handler. You can setup you handler for specific outbound/inbound handles using connect smart pointer:
+You can setup a generic handlers via rmanager API:
+```q
+.sys.use[`rmanager][`setHandlerAt][`.z.ps;`before`exec;`some_name;`.some.handler];
+.sys.use[`rmanager][`setHandler][`.z.pc;`some_name`;`.some.onClose];
+.some.handler:{[v] returns either (`CANCEL;result) or v};
+```
+ IPC adds `.ipc.open` to .z.po/.z.wo, `.ipc.close` to .z.pc/.z.wc, `.ipc.exec` to .z.ps, .z.pg before the generic `exec` handler. You can setup you handler for specific outbound/inbound handles using connect smart pointer:
 ```Rust
 i:.sys.get`ipc;
 p:i.get`current; // get a smart ptr for the current handle (.z.w)
@@ -183,3 +189,7 @@ Set an execution handler for the specific handle.
 .my.handler:{[isSync;ptr;msg] $[isSync;ptr[`result;count msg];ptr[`asend;count msg]]}; 
 conn[`setHandler;`.my.handler] // or conn[`setHandler;.my.handler]
 ```
+
+#### onClose
+
+Set a handler to be called on close. For an inbound connection the handler will be called on close. For an outbound the result is similar to newconn.onConnect setting.

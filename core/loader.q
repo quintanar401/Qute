@@ -219,8 +219,14 @@ update namespace:`, api:count[i]#enlist 0#` from `.sys.modules;
 .sys.host: .Q.host .z.a;
 .sys.port: system "p";
 .sys.timeout: system "T";
+.sys.tinterval: system "t";
 .sys.pid: .z.i;
 .sys.uid: first 1?0Ng; // unique process id
+// if 1b the process is started to test some functionality (maybe in PROD) - modules can use it
+// to be more quiet - not send msgs, not create files and etc. It is added primarily to allow
+// a user to start processes like rdb, tp and etc without them reporting their status, providing
+// info to a gw and etc.
+.sys.test:$[`test in key .sys.opt;"B"$first .sys.opt`test;0b];
 
 // In normal case return just API functions, for tests we need the namespace too.
 // useFrom - load the module from a namespace

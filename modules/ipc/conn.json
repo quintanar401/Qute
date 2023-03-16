@@ -74,5 +74,11 @@
         "name": "getHandle",
         "typ": "action",
         "getter": ".ipc.getHandle"
+    },
+    {
+        "name": "onClose",
+        "typ": "action",
+        "getter": "{'`not_impl}",
+        "setter": ".ipc.connOnClose"
     }
 ]

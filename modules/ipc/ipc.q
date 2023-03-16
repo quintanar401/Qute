@@ -31,7 +31,7 @@
 / lastConnect/Disconnect - time of the event
 / logError - log or not an error on disconnect/failed connect
 .ipc.inbound:([handle:0#0i] alive:0#0b; name:0#`; host:0#`; user:0#`; ws:0#0b; lastConnect:0#0p; lastDisconnect:0#0p;
-    cb:(); logError:0#0b);
+    cb:(); cl:(); logError:0#0b);
 .ipc.inbound[0i]:(1b;`default;`;`;0b;0Np;0Np;();0b); // 0 handle
 
 / ***************
@@ -126,7 +126,7 @@
  };
 
 .ipc.onInboundDisconnect:{[h]
-    .ipc.inbound[h;`alive`lastDisconnect]:(0b;.sys.P[]);
+    .ipc.inbound[h;`alive`lastDisconnect`cb`cl]:(0b;.sys.P[];();());
     .ipc.event.fire[`inbound.disconnect;h];
  };
 
@@ -221,6 +221,18 @@
  };
 
 .ipc.getHandle:{[cfg] $[`handle in key cfg; cfg`handle; .ipc.outbound[cfg`name;`handle]]};
+
+.ipc.connOnClose:{[cfg;e]
+    if[`name in key cfg;
+        $[-11=type e;.ipc.evOnConnect.onExt[n;e;e];.ipc.evOnConnect.onExt[n;`default;e]];
+        :1b;
+    ];
+    if[(1b;cfg`id)~.ipc.inbound[h:cfg`handle]`alive`lastConnect;
+        update cl:{distinct x,enlist y}[e] each cl from `.ipc.inbound where handle=h;
+        :1b;
+    ];
+    0b
+ };
 / ***************
 / .z.xxx handlers
 / ***************

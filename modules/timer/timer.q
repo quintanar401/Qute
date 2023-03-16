@@ -121,7 +121,7 @@
     .timer.jobs[j;`active]: 1b;
  };
 
-.timer.stop:{[c] delete from `.timer.jobs where id=c`id };
+.timer.stop:{[c] update cancelled:1b from `.timer.jobs where id=c`id };
 
 .timer.run:{[cfg]
     .timer.execJob[.timer.getJob cfg`id;.sys.P[]]

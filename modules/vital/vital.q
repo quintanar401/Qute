@@ -3,7 +3,7 @@
 .vital.log:.sys.use[`log;`VITAL];
 .vital.iInit:{[conn]
     if[99<>type conn; conn:enlist[`port]!enlist conn];
-    i:(.sys.use`ipc)[`new] .vital.master,conn,enlist[`onConnect]!enlist `.vital.onConnect;
+    i:(.sys.use`ipc)[`new] .vital.master,conn,`logError`onConnect!(0b;`.vital.onConnect);
     // at this time host & port are ok
     if[not `name in key conn; i:i[`name;`$"vital:",string[i`host],":",string i`port]];
     if[i`exists; .vital.log.info "vital connection already exists"; :()];
