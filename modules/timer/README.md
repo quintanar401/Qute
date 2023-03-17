@@ -18,7 +18,7 @@ Accepts one argument:
 * symbol - job's unique name.
 * (::) - return all jobs.
 
-### newjob settings
+### timer.newjob settings
 
 To get a new job:
 ```
@@ -141,7 +141,7 @@ jobCfg: jobCfg[`cb;.mod.startSomethingElse];
 
 Action. Add the job to the queue. It doesn't enable the timer.
 
-### job settings
+### timer.job settings
 
 You can get a handle for a job by using its name, group or id and use it to control it.
 ```

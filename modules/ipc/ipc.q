@@ -32,7 +32,7 @@
 / logError - log or not an error on disconnect/failed connect
 .ipc.inbound:([handle:0#0i] alive:0#0b; name:0#`; host:0#`; user:0#`; ws:0#0b; lastConnect:0#0p; lastDisconnect:0#0p;
     cb:(); cl:(); logError:0#0b);
-.ipc.inbound[0i]:(1b;`default;`;`;0b;0Np;0Np;();0b); // 0 handle
+.ipc.inbound[0i]:(1b;`default;`;`;0b;0Np;0Np;();();0b); // 0 handle
 
 / ***************
 / newconn actions
@@ -126,8 +126,11 @@
  };
 
 .ipc.onInboundDisconnect:{[h]
+    cl:.ipc.inbound[h;`cl];
     .ipc.inbound[h;`alive`lastDisconnect`cb`cl]:(0b;.sys.P[];();());
     .ipc.event.fire[`inbound.disconnect;h];
+    {.Q.trp[y;x;{.ipc.log.err each ("close handler failed with ",y,":",.Q.s1 x;
+        "stack:\n",.Q.sbt z)}y]}[`handle`status!(h;0b)] each cl;
  };
 
 .ipc.outboundDisconnect:{[n]

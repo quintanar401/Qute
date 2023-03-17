@@ -2,16 +2,19 @@
     {
         "name": "name",
         "value_type": "s",
+        "internal": true,
         "setter": "{[x;y] $[`name in key x;'\"readonly\";y]}"
     },
     {
         "name": "handle",
         "value_type": "i",
+        "internal": true,
         "setter": "{[x;y] $[`handle in key x;'\"readonly\";y]}"
     },
     {
         "name": "id",
         "value_type": "p",
+        "internal": true,
         "setter": "{[x;y] $[`id in key x;'\"readonly\";y]}"
     },
     {

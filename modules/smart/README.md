@@ -35,6 +35,7 @@ JSON file: array of objects with parameters. Supported fields:
 * typ - by default it is param but can be set to action for actions.
 * getter - get function (including actions, optional).
 * setter - set function (including actions, optional).
+* internal - bool, optional. Internal field, do not show help for it.
 
 Difference of setter vs getter for actions:
 ```Rust

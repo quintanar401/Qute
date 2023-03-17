@@ -1,7 +1,7 @@
-.smart.conf:([] name:0#`; typ:0#`; optional:0#0b; default:(); value_type:(); convert_to:(); setter:(); getter:());
-`.smart.conf upsert (`validate;`action;1b;::;`$();`$();`.smart.validate;`.smart.validate);
-`.smart.conf upsert (`help;`action;1b;::;`$();`$();`.smart.helps2;`.smart.helpg);
-`.smart.conf upsert (`cfg;`param;1b;::;1#`dict;`$();`.smart.setCfg;`.smart.getCfg);
+.smart.conf:([] name:0#`; typ:0#`; optional:0#0b; default:(); value_type:(); convert_to:(); setter:(); getter:(); internal:0#0b);
+`.smart.conf upsert (`validate;`action;1b;::;`$();`$();`.smart.validate;`.smart.validate;0b);
+`.smart.conf upsert (`help;`action;1b;::;`$();`$();`.smart.helps2;`.smart.helpg;0b);
+`.smart.conf upsert (`cfg;`param;1b;::;1#`dict;`$();`.smart.setCfg;`.smart.getCfg;0b);
 
 .smart.defCols:cols .smart.conf;
 
@@ -29,9 +29,10 @@
 .smart.loadHelp:{
     h: raze {{(0^first where x like "####*")_x} (.sys.use`help)[`help] ` sv x,`raw} each .smart.id,.smart.plugins;
     d:.smart.dropBlanks each 1_'n:(where h like "####*")_ h;
-    n:`$(1+n?\:" ")_'n:first each n;
+    n:{(x:`$" "vs x)except`}each(1+n?\:" ")_'n:first each n;
     dd:(1+dd?\:".")#'dd:d[;0];
-    .smart.helpData:(sn!count[sn:.smart.conf`name]#enlist("Not available";"Not available")),n!(enlist each dd),'enlist each d;
+    n:raze[n]!((enlist each dd),'enlist each d) raze (count each n)#'til count n;
+    .smart.helpData:(sn!count[sn:exec name from .smart.conf where not internal]#enlist("Not available";"Not available")),n;
  };
 
 // set new values one by one using the correct setters
@@ -142,7 +143,7 @@
 .smart.preprocCfg:{[cfg]
     if[$[98=type cfg;10=type first cfg`name;0b]|0=type cfg;
         // list of cfg entries from json -> convert to a table
-        cfg:c#/:((c:.smart.defCols)!("";"param";0b;"::";();();"::";"::")),/:cfg;
+        cfg:c#/:((c:.smart.defCols)!("";"param";0b;"::";();();"::";"::";0b)),/:cfg;
         val:{
             if[any x~/:("getter";"setter"); if[all y in .Q.an,"."; :`$y]];
             $[10=type y;@[value;y;{'"couldn't parse value of name=",string[y],", option=",x,", with ",z}[x;z]];y]

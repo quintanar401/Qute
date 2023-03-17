@@ -126,8 +126,9 @@ update namespace:`, api:count[i]#enlist 0#` from `.sys.modules;
     txt: "c"$@[read1;p;{'"couldn't load module ",(1_string x),": ",y}p:` sv m[`path],` sv n,`q];
     // rename namespace
     mns: $[`ns in key m`settings;m[`settings]`ns;sn];
-    ns: mns,"__",string .sys.cnt+:1; // rename .xxx into .xxx__NN
-    txt: ssr[txt;fr:".",mns,".";to:".",ns,"."];
+    ns: mns,sfx:"__",string .sys.cnt+:1; // rename .xxx into .xxx__NN
+    sns: mns,"_",sfx; // .state -> .xxx___NN
+    txt: ssr[;".state.";".",sns,"."] ssr[txt;fr:".",mns,".";to:".",ns,"."];
     // try to evaluate
     .Q.trp[value;txt;{.sys.log.err "couldn't evaluate module ",x,": ",y,"\n",.Q.sbt z;'y}sn];
     // load configuration files - 1) module's dir 2) config/module if available & there is no iInit
@@ -192,6 +193,7 @@ update namespace:`, api:count[i]#enlist 0#` from `.sys.modules;
         .sys.log.dbg "Calling ",string[n],".iInit function";
         nns: string[n],"__",string .sys.cnt+:1; // new namespace
         (nns:`$".",nns) set .sys.subst[get ns;string[ns],".";".",nns,"."];
+        @[nns;`ns;:;nns];
         err:{[n;exc;st]
             .sys.log.err "Exception in iInit in module ",(n:string n),": ",exc;
             .sys.log.err "Stack trace: \n",.Q.sbt st;

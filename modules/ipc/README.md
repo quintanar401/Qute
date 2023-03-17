@@ -155,7 +155,7 @@ conn:conn[`onConnect;`.mymod.onConnect];
 #### add
 
 Add a new connection. Just add a new conection, do not connect (unless requested). Returns a connection smart pointer.
-```Rust
+```q
 conn: conn`add;
 conn: conn`connect; / can be used to connect explicitly
 ```
@@ -165,10 +165,6 @@ conn: conn`connect; / can be used to connect explicitly
 Check if host:port point to the caller. 0 outbound handles are not allowed.
 
 ### ipc.conn settings
-
-#### name id handle
-
-Readonly fields. Name is set for an outbound connection, handle and id for inbound.
 
 #### connect
 
@@ -180,16 +176,48 @@ Disconnect an inbound/outbound connection. The inbound connection is checked for
 
 #### send asend trySend tryASend
 
-Execute a sync/async query. Inbound connections are checked for validity to avoid stale handles. Try means return 0b if the conenction is disconnected.
+Execute a (a)sync query. Inbound connections are checked for validity to avoid stale handles. `try` means return 0b if the conenction is disconnected.
 
 #### setHandler
 
-Set an execution handler for the specific handle.
-```Rust
+Set an execution handler specific to this connection. `result` contains the result for the sync call.
+```q
 .my.handler:{[isSync;ptr;msg] $[isSync;ptr[`result;count msg];ptr[`asend;count msg]]}; 
 conn[`setHandler;`.my.handler] // or conn[`setHandler;.my.handler]
 ```
 
 #### onClose
 
-Set a handler to be called on close. For an inbound connection the handler will be called on close. For an outbound the result is similar to newconn.onConnect setting.
+Set a handler to be called on close. For an inbound connection the handler will be called on close with a dictionary with `status` field set to `0b` and `handle` field set to the `q` handle.
+For an outbound the result is similar to newconn.onConnect setting.
+
+#### setName
+
+Set a name for an inbound connection.
+```q
+(ipc.get`current)[`setName;`user]
+```
+
+#### timeout
+
+N/A atm
+
+#### result
+
+Set/get the current sync call result. IPC handlers set via `setHandler` are called with 3 arguments: isSync, `conn` smart pointer and the incoming message. 
+If the call is sync they can set/get its result:
+```q
+handler:{[isS;ptr;msg] if[isS; ptr[`result;@[value;msg;{(`EXCEPTION;x)}]]]};
+```
+Unhandled exceptions are printed in the log, set the result to (`EXCEPTION;str) if it is not an unexpected exception.
+
+#### isAlive
+
+Check if the connection is alive.
+```q
+if[conn`isAlive; conn[`asend;"10"]];
+```
+
+#### getHandle
+
+Get the underlying `q` handle. It can be null if the connection is disconnected.

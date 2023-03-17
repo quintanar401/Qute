@@ -50,7 +50,8 @@
     if[is0; .mbus.onConnect enlist[`status]!enlist 1b]; // force 0 handle
  };
 
-.mbus.send:{[msg]
+.mbus.send:{[msg] .mbus.send0 msg}; // to be able to redirect to another instance
+.mbus.send0:{[msg]
     msg:(`data`mtype!(::;`normal)),
         $[99=type msg; msg,enlist[`]!enlist (::); msg:``data!(::;msg)],
         .mbus.cfg.address,`.ts`.id!(.sys.P[];.sys.uid);
@@ -68,7 +69,8 @@
 .mbus.pin:{.mbus.send $[99=type x; x,`mtype`!(`post;::); ``data`mtype!(::;x;`post)]};
 .mbus.post:{.mbus.send $[99=type x; x,`mtype`!(`post;::); ``data`mtype!(::;x;`post)]};
 
-.mbus.sub:{[msg]
+.mbus.sub:{[msg] .mbus.sub0 msg};
+.mbus.sub0:{[msg]
     if[not 99=type msg; '"format"];
     if[not `cb in key msg; '"callback required"];
     .mbus.subscribers[id:.sys.P[]]: msg`cb;
