@@ -2,7 +2,7 @@
     .rman.handlers: .sys.use[`hmanager;0b];
     .rman.events: .sys.use[`hmanager;1b];
     {.rman.handlers.add[x;`start;::]} each zz:`.z.pg`.z.ps`.z.pp`.z.ph`.z.ws;
-    .rman.handlers.add[;`exec;value] each `.z.pg`.z.ps;
+    .rman.handlers.add[;`exec;{@[value;x;{(`EXCEPTION;x)}]}] each `.z.pg`.z.ps;
     / but switch off ws pp and ph
     .rman.handlers.add[;`exec;{(`EXCEPTION;"access")}] each `.z.ph`.z.pp`.z.ws;
     {.rman.handlers.add[x;`end;::]} each zz;

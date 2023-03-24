@@ -149,10 +149,10 @@
 
 / get a smart ptr for the current .z.w handle
 .ipc.getCurr:{[]
-    if[(h:.z.w) in (0!.ipc.inbound)`handle;
+    if[(h:.sys.w[]) in (0!.ipc.inbound)`handle;
         :.ipc.conn.new `handle`id!(h;.ipc.inbound[h;`lastConnect]);
     ];
-    if[not null n:exec first name from .ipc.outbound where handle=.z.w;
+    if[not null n:exec first name from .ipc.outbound where handle=h;
         :.ipc.conn.new enlist[`name]!enlist n;
     ];
     '"unexpected"
@@ -236,6 +236,8 @@
     ];
     0b
  };
+.ipc.defer:{-30!(::)};
+.ipc.deferSend:{[cfg;isE;data] -30!(cfg`getHandle;isE;data)};
 / ***************
 / .z.xxx handlers
 / ***************
@@ -255,24 +257,22 @@
 
 / tcp/unix open
 .ipc.onOpen:{
-    .ipc.inbound[x]: `alive`host`user`ws`lastConnect`cb!(1b;h:.ipc.rman.host x;.z.u;0b;.sys.P[];());
-    .ipc.log.info "Incoming connection: ",string[h],":",string[.z.u],"=",string x;
+    .ipc.inbound[x]: `alive`host`user`ws`lastConnect`cb!(1b;h:.ipc.rman.host .sys.a[];u:.sys.u[];0b;.sys.P[];());
+    .ipc.log.info "Incoming connection: ",string[h],":",string[u],"=",string x;
     .ipc.event.fire[`inbound.connect;x];
  };
 
 .ipc.onOpenWS:{
-    .ipc.inbound[x]: `alive`host`user`ws`lastConnect`cb!(1b;.ipc.rman.host x;.z.u;1b;.sys.P[];());
-    .ipc.log.info "Incoming connection: ",string[h],":",string[.z.u],"=",string x;
+    .ipc.inbound[x]: `alive`host`user`ws`lastConnect`cb!(1b;.ipc.rman.host x;u:.sys.u[];1b;.sys.P[];());
+    .ipc.log.info "Incoming connection: ",string[h],":",string[u],"=",string x;
     .ipc.event.fire[`inbound.connect;x];
  };
 
-.ipc.psHandler:{.ipc.pxHandler[0b;x]};
-.ipc.pgHandler:{.ipc.pxHandler[1b;x]};
-.ipc.pxHandler:{[isSync;msg]
+.ipc.pHandler:{[msg]
     hh: .ipc.getCurr[];
     .ipc.result:(::);
-    if[not count cb:$[`name in key c:hh`cfg; .ipc.outbound[c`name;`cb];.ipc.inbound[.z.w;`cb]]; :msg];
-    {[s;h;m;f] .Q.trp[f[s;h];m;{.ipc.log.err "callback failed: ",x,", stack: ",.Q.sbt y}]}[isSync;hh;msg] each cb;
+    if[not count cb:$[`name in key c:hh`cfg; .ipc.outbound[c`name;`cb];.ipc.inbound[.sys.w[];`cb]]; :msg];
+    {[h;m;f] .Q.trp[f[h];m;{.ipc.log.err "callback failed: ",x,", stack: ",.Q.sbt y}]}[hh;msg] each cb;
     : $[`EXCEPTION~first r:.ipc.result;r;(`CANCEL;r)];
  };
 
@@ -300,17 +300,18 @@
     rman[`setHandler][`.z.wo;`ipc.open;.ipc.onOpenWS];
     rman[`setHandler][`.z.wc;`ipc.close;.ipc.onClose];
     / handle exec events
-    rman[`setHandlerAt][`.z.ps;`before`exec;`.ipc.exec;.ipc.psHandler];
-    rman[`setHandlerAt][`.z.pg;`before`exec;`.ipc.exec;.ipc.pgHandler];
+    rman[`setHandlerAt][`.z.ps;`before`exec;`ipc.exec;.ipc.pHandler];
+    rman[`setHandlerAt][`.z.pg;`before`exec;`ipc.exec;.ipc.pHandler];
     / data in/out
     / rman[`setHandlerAt][`.z.ph;`before`start;`ipcIn;.ipc.onInMsgHTTP];
     / rman[`setHandlerAt][`.z.pp;`before`start;`ipcIn;.ipc.onInMsgHTTP];
     / rman[`setHandlerAt][`.z.ph;`after`end;`ipcOut;.ipc.onOutMsgHTTP];
     / rman[`setHandlerAt][`.z.pp;`after`end;`ipcOut;.ipc.onOutMsgHTTP];
-    :`new`addPlugin`events`get;
+    .sys.ipc: (`,api:`new`addPlugin`events`get)#get .ipc.ns;
+    :api;
  };
 
 .ipc.addPlugin:{[ns]
     .ipc.log.info "Adding plugin ",string ns;
     ns .ipc.ns;
- }
+ };

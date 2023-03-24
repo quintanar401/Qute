@@ -52,7 +52,7 @@
     .mockdb.log.info "subscribe";
     c[`asend;(id;`.mockdb.upd;.mockdb.config`pid)];
  };
-.mockdb.upd:{[isS;ptr;msg]
+.mockdb.upd:{[ptr;msg]
     if[not `.mockdb.upd~first msg; :()];
     if[`start=msg 1; .mockdb.log.info "connected to tp"];
     if[`upd=msg 1; .mockdb.log.info "got data"];

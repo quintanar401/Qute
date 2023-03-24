@@ -69,7 +69,7 @@
 .mbus.pin:{.mbus.send $[99=type x; x,`mtype`!(`post;::); ``data`mtype!(::;x;`post)]};
 .mbus.post:{.mbus.send $[99=type x; x,`mtype`!(`post;::); ``data`mtype!(::;x;`post)]};
 
-.mbus.sub:{[msg] .mbus.sub0 msg};
+.mbus.sub:{[msg] .mbus.sub0 msg}; // to be able to redirect to another instance
 .mbus.sub0:{[msg]
     if[not 99=type msg; '"format"];
     if[not `cb in key msg; '"callback required"];
@@ -108,8 +108,8 @@
     if[not 0=.mbus.handle`handle; .mbus.handle`disconnect];
  };
 
-.mbus.onMsg0:{.mbus.onMsg[0b;0i;x]};
-.mbus.onMsg:{[isS;h;msg]
+.mbus.onMsg0:{.mbus.onMsg[.sys.ipc.get`current;x]};
+.mbus.onMsg:{[h;msg]
     if[not .mbus.name~first msg; :msg];
     // the server confirms subscription, send pending msgs
     if[`register~msg 1;

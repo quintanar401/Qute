@@ -83,5 +83,10 @@
         "typ": "action",
         "getter": "{'`not_impl}",
         "setter": ".ipc.connOnClose"
+    },
+    {
+        "name": "deferSend",
+        "typ": "action",
+        "setter": ".ipc.deferSend"
     }
 ]

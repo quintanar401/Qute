@@ -89,8 +89,8 @@
     ];
     r: {[a;n;h]
         if[not n~`timer;.hman.log.dbg2[{".hman.handlers: executing handler ",$[-11=type x;string `unnamed^x;.Q.s1 x]};n]];
-        if[any first[a]~/:`CANCEL`EXCEPTION; :last a];
-        r: .Q.trp[h;a;{.hman.log.err "handler ",string[x]," failed with ",y,", stacktrace:\n",.Q.sbt z; `CANCEL}n];
+        if[any first[a]~/:`CANCEL`EXCEPTION; if[not n like "*.res"; :a]];
+        r: .Q.trp[h;a;{.hman.log.err "handler ",string[x]," failed with ",y,", stacktrace:\n",.Q.sbt z; (`EXCEPTION;"internal error")}n];
         : $[(()~r)|(::)~r;a;r];
     }/[arg;.hman.names hn;.hman.handlers hn];
     $[`CANCEL~first r; last r; `EXCEPTION~first r; 'last r; r]

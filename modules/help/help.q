@@ -22,22 +22,30 @@
   txt:(where (not txt like "####*")&txt like "##*")_txt;
   hlp:`description`minit`iinit!(.help.extract[txt;"Module"];
         ("Module parameters";.help.extract[txt;"Configuration"]);("Instance parameters";.help.extract[txt;"Init"]));
-  hlp,:a!.help.extractApi[txt] each a:(m`api),$[`smartHelp in key ns:m`namespace;key ns`smartHelp;()];
+  a:m`api;
+  if[not `inited=m`status; // do our best to find help
+    a:`${(-1+count x)_y first where (y:" "vs y)like x}[p] each t where (t:txt[;0]) like "* ",p:string[m[`name]^$[`ns in m`settings;`$m[`settings]`ns;`]],".*"
+  ];
+  hlp,:a!.help.extractApi[txt] each a:a,$[`smartHelp in key ns:m`namespace;key ns`smartHelp;()];
   :hlp;
  };
 
 .help.map:(1#-1)!();
+.help.uninited:0#0;
 
 .help.findMod:{[n]
   m:exec i from .sys.modules where name=n, status=`inited;
-  if[0=count m; m: exec i from .sys.modules where name=n, version=max version, status=`inited];
-  if[0=count m; '"module ",string[n]," doesn't exist/not inited"];
-  m: last m;
-  if[not m in key .help.map; .help.map[m]: .help.loadMod .sys.modules m];
+  if[0=count m; m: exec i from .sys.modules where name=n, version=max version];
+  if[0=count m; '"module ",string[n]," doesn't exist"];
+  mm:.sys.modules m: last m;
+  if[(isI:`inited=mm`status)&m in .help.uninited; .help.uninited:.help.uninited except m; .help.map:m _ .help.map];
+  if[not m in key .help.map; .help.map[m]: .help.loadMod mm];
+  if[not isI; .help.uninited,:m];
   : m;
  };
 
 .help.help:{[n]
+  if[n~(::); :enlist["Available modules:"],"  ",/:string asc distinct .sys.modules`name];
   if[-11=type n; n:string n];
   if[not "." in n;
     m: .help.findMod `$n;

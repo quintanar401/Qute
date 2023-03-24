@@ -6,6 +6,8 @@ In the first mode (event mode) the handlers are independent and do not affect ea
 
 For efficiency reasons one Handle Manager instance can manage several handler groups.
 
+If the handler's name ends with `.res` it gets executed even if the processing has stopped (clean up mode). It must expect special messages therefore (see `run` function).
+
 ### Init
 
 Handle manager accepts one parameter - mode.

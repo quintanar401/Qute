@@ -215,6 +215,9 @@ update namespace:`, api:count[i]#enlist 0#` from `.sys.modules;
 .sys.t:{.z.t};
 .sys.d:{.z.d};
 .sys.n:{.z.n};
+.sys.u:{.z.u};
+.sys.w:{.z.w};
+.sys.a:{.z.a};
 .sys.exit:{exit x};
 
 // system settings
