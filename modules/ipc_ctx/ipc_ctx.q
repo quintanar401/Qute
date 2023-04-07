@@ -2,7 +2,7 @@
 
 .ipc.setDefaultCtx:{[isSync;msg]
     if[(0=w:.sys.w[])&not 0=.ipc.context.handle; .ipc.context[`msg0]: msg; :()];
-    .ipc.context:`sync`msg`realUser`user`appUser`qUser`host`handle`reqContext!(isSync;msg;u;u;u;u:.sys.u[];.ipc.rman.host .sys.a[];w;());
+    .ipc.context:`sync`msg`realUser`user`appUser`qUser`host`handle`reqId`reqContext!(isSync;msg;u;u;u;u:.sys.u[];.ipc.rman.host .sys.a[];w;"j"$.z.P;(0#`)!());
  };
 .ipc.psHandler:{.ipc.setDefaultCtx[0b;x]; .ipc.pxHandler x};
 .ipc.pgHandler:{.ipc.setDefaultCtx[1b;x]; .ipc.pxHandler x};

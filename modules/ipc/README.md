@@ -68,9 +68,16 @@ ev.on[`outbound.disconnect;`myhandler;{[ev] ...}];
 
 Defer a sync response. Use `conn.deferSend` to send the reponse.
 ```q
-h`defer;
+.sys.ipc`defer;
 ...
 h[`deferSend;isException;data];
+```
+
+### ipc.broadcast
+
+Send a broadcast async message. Params: a list of `conn` smart handles and message. All input smart handles are expected to be outbound connections atm.
+```
+.sys.ipc.broadcast[(h1;h2);"1+1"];
 ```
 
 ### ipc.addPlugin
@@ -180,7 +187,7 @@ Connection smart pointer settings.
 
 #### connect
 
-Start to connect. Not applicable to inbound connections.
+Start to connect. Not applicable to inbound connections. Returns 1b/0b (success/failure).
 
 #### disconnect
 
@@ -238,7 +245,14 @@ Get the underlying `q` handle. It can be null if the connection is disconnected.
 
 Send a response to a defered request. Use `ipc.defer` to defer the request.
 ```q
-h`defer;
+ipc`defer;
 ...
 h[`deferSend;isException;data];
+```
+
+#### get
+
+Get the value of a column in inbound/outbound table.
+```q
+h[`get;`lastConnect]
 ```

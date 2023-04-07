@@ -17,9 +17,8 @@
     rman[`setHandlerAt][`.z.pg;`after`end;`ipcOut;.mod.onOutMsg];
     rman[`setHandlerAt][`.z.ws;`before`start;`ipcIn;.mod.onInMsg];
     / install as first before an attempt to send
-    ns[`handlers][`addAt][`outbound.send;`first;`stats;.mod.onSend];
-    ns[`handlers][`addAt][`outbound.asend;`first;`stats;.mod.onSend];
-    ns[`handlers][`addAt][`outbound.wssend;`first;`stats;.mod.onSend];
+    {x[`handlers][`addAt][y;`first;`stats;.mod.onSend]}[rman] each `outbound.send`outbound.asend`inbound.wssend`inbound.send`inbound.asend;
+    ns[`handlers][`addAt][`outbound.broadcast;`first;`stats;.mod.onSendB];
     / update default
     @[ns;`defaultOutbound;{{[x;y] x[],`numIn`numOut`sizeIn`sizeOt!(0;0;0;0)}x}];
  };
@@ -40,5 +39,11 @@
     sz: -22!msg`msg;
     update lastOut: .sys.P[], numOut+1, sizeOut+sz from .mod.outbound where handle=msg`handle;
     update lastOut: .sys.P[], numOut+1, sizeOut+sz from .mod.inbound where handle=msg`handle;
+    msg
+ };
+.mod.onSendB:{[msg]
+    sz: -22!msg`msg;
+    update lastOut: .sys.P[], numOut+1, sizeOut+sz from .mod.outbound where handle in msg`handles;
+    update lastOut: .sys.P[], numOut+1, sizeOut+sz from .mod.inbound where handle in msg`handles;
     msg
  };

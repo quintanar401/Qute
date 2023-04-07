@@ -88,5 +88,10 @@
         "name": "deferSend",
         "typ": "action",
         "setter": ".ipc.deferSend"
+    },
+    {
+        "name": "get",
+        "typ": "action",
+        "setter": ".ipc.getColumn"
     }
 ]

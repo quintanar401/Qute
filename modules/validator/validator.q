@@ -29,7 +29,11 @@
     : obj
  };
 
-.val.check:{[n;t;obj] obj[n]: .[.val.exec;(t 0;t 1;obj n);{'string[x],": ",y}n] };
+.val.check:{[n;t;obj]
+    f:.[.val.exec;;{'string[x],": ",y}n];
+    obj[n]: $[(type o:obj n)in 0 99h;f each (t 0;t 1;) each o;f o];
+    obj
+ };
 
 .val.exec:{[sp;pp;d]
     p:(sp`new)[];

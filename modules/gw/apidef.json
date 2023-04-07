@@ -1,0 +1,51 @@
+[{
+    "name": "apiInfo",
+    "value_type": ["table","list"],
+    "check": [
+        {
+            "name": "name",
+            "value_type": "sC",
+            "convert_to": "s"
+        },
+        {
+            "name": "basicFilter",
+            "value_type": "dict"
+        },
+        {
+            "name": "check",
+            "value_type": "sC",
+            "convert_to": "s",
+            "default": "`"
+        },
+        {
+            "name": "timeFilter",
+            "value_type": "sC",
+            "convert_to": "s",
+            "default": "`"
+        },
+        {
+            "name": "filter",
+            "value_type": "sC",
+            "convert_to": "s",
+            "default": "`"
+        }
+    ]
+},
+{
+    "name": "pid",
+    "value_type": "s"
+},
+{
+    "name": "host",
+    "value_type": "s"
+},
+{
+    "name": "port",
+    "value_type": "ij",
+    "convert_to": "i"
+},
+{
+    "name": "primary",
+    "value_type": "b",
+    "default": "0b"
+}]

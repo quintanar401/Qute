@@ -55,7 +55,7 @@
 .log.warn:{[msg]
     // Log a message to the log channel.
     // @param msg string Message.
-    .log.handle[.log.sname;" WARN "; .log.handle .log.caller[];msg]
+     .log.handle .log.handler[.log.sname;" WARN "; .log.handle .log.caller[];msg]
  };
 
 .log.setLevel:{[lvl]

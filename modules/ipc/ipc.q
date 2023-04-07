@@ -236,8 +236,9 @@
     ];
     0b
  };
-.ipc.defer:{-30!(::)};
 .ipc.deferSend:{[cfg;isE;data] -30!(cfg`getHandle;isE;data)};
+.ipc.getColumn:{[cfg;c] $[`handle in key cfg;.ipc.inbound[cfg`handle]c;.ipc.outbound[cfg`name;c]};
+
 / ***************
 / .z.xxx handlers
 / ***************
@@ -282,6 +283,16 @@
 .ipc.new:{c:.ipc.newConn.new[]; $[99=type x;c[`cfg;x];c]};
 .ipc.events:{.ipc.event};
 .ipc.get:{$[`inbound~x;.ipc.inbound;`outbound~x;.ipc.outbound;`current~x;.ipc.getCurr[];'"domain"]};
+.ipc.defer:{-30!(::)};
+.ipc.broadcast:{[hh;msg]
+    // we expect hh to be outbound handles
+    n:hh@\:`name;
+    if[any i:null h:.ipc.outbound[n;`handle];
+        if[any null .ipc.startConnect each n where i; '"disconnected"];
+        h:.ipc.outbound[n;`handle];
+    ];
+    :.ipc.handlers.run[`outbound.broadcast;`names`handles`msg!(n;h;msg)];
+ };
 
 .ipc.mInit:{
     / setup handlers
@@ -294,6 +305,7 @@
     .ipc.handlers.add[`inbound.wssend;`exec;{@[x`handle;x`msg;{(`EXCEPTION;x)}]}];
     .ipc.handlers.add[`inbound.send;`exec;{@[x`handle;x`msg;{(`EXCEPTION;x)}]}];
     .ipc.handlers.add[`inbound.asend;`exec;{@[neg x`handle;x`msg;{(`EXCEPTION;x)}]}];
+    .ipc.handlers.add[`outbound.broadcast;`exec;{@[-25!;(x`handles;x`msg);{(`EXCEPTION;x)}]}];
     / open/close - update inbound/outbound
     rman[`setHandler][`.z.po;`ipc.open;.ipc.onOpen];
     rman[`setHandler][`.z.pc;`ipc.close;.ipc.onClose];
@@ -307,7 +319,7 @@
     / rman[`setHandlerAt][`.z.pp;`before`start;`ipcIn;.ipc.onInMsgHTTP];
     / rman[`setHandlerAt][`.z.ph;`after`end;`ipcOut;.ipc.onOutMsgHTTP];
     / rman[`setHandlerAt][`.z.pp;`after`end;`ipcOut;.ipc.onOutMsgHTTP];
-    .sys.ipc: (`,api:`new`addPlugin`events`get)#get .ipc.ns;
+    .sys.ipc: (`,api:`new`addPlugin`events`get`broadcast)#get .ipc.ns;
     :api;
  };
 

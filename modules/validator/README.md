@@ -20,7 +20,7 @@ Validate parameters: check and convert types, check required fields, assign defa
     }
 ]
 ```
-```Rust
+```q
 v:.sys.use[`validator;json_cfg_as_list];
 p:v.validate `param1`dictparam!(10;..);
 ```
@@ -33,11 +33,11 @@ Parameters:
 * convert_to - optional, convert into this type(s). See `smart` module.
 * optional - false by default, can be set to true.
 * default - if the field is missing assign this value. If it is a string, value fn will be called. If it is a function, it will be called with the current dictionary.
-* check - optional, validate a subfield. A list of validation settings.
+* check - optional, validate a subfield (dict, table, list of dicts). A list of validation settings.
 * post - optional, post process function.
   
 Default and post process function example:
-```Rust
+```q
 [
     {
         "name": "host",
@@ -62,6 +62,6 @@ Default and post process function example:
 ### validate
 
 Validate the input dictionary. Throws an exception if a required field is missing or some field has an incorrect type. Also assigns default values.
-```Rust
+```q
 params: val.validate params;
 ```
